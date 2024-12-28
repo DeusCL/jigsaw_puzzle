@@ -17,6 +17,7 @@ class Scene:
 		self.target_piece = None
 		self.grabbing_piece = None
 		self.grabbing_pos = 0, 0
+		self.grabed_nothing = False
 
 
 	def load_jigsaw(self, background_img, seed=1):
@@ -39,8 +40,10 @@ class Scene:
 
 	def handle_event(self, event):
 		if event.type == pg.MOUSEBUTTONUP:
+			# Soltar pieza
 			self.grabbing_piece = None
 			self.grabbing_pos = 0, 0
+			self.grabed_nothing = False
 
 	def update(self):
 		for piece in self.pieces:
@@ -56,7 +59,7 @@ class Scene:
 			if piece.targeting:
 				self.target_piece = piece
 
-		if self.target_piece is not None:
+		if self.target_piece is not None and not self.grabed_nothing:
 			self.app.current_cursor = CURSOR_HAND_OPEN
 
 			if pg.mouse.get_pressed()[0]:
@@ -66,6 +69,9 @@ class Scene:
 					self.grabbing_piece = self.target_piece
 
 					self.grabbing_pos = self.grabbing_piece.get_relpos(self.app.mpos)
+
+		elif pg.mouse.get_pressed()[0] and not self.grabed_nothing:
+			self.grabed_nothing = True
 
 		if self.grabbing_piece is not None:
 			# px, py = self.grabbing_piece.pos
