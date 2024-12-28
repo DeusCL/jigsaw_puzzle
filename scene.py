@@ -50,6 +50,16 @@ class Scene:
 		for piece in self.pieces:
 			piece.update()
 
+
+	def render(self, main_surface):
+		self.target_piece = None
+
+		for piece in sorted(self.pieces, key=lambda p: p.z_index):
+			main_surface.blit(piece.surface, piece.pos)
+
+			if piece.targeting:
+				self.target_piece = piece
+
 		if self.target_piece is not None and not self.grabed_nothing:
 			self.app.current_cursor = CURSOR_HAND_OPEN
 
@@ -69,19 +79,5 @@ class Scene:
 			mx, my = self.app.mpos
 
 			self.grabbing_piece.pos = mx - dx, my - dy
-
-
-	def render(self, main_surface):
-		self.target_piece = None
-
-		for piece in sorted(self.pieces, key=lambda p: p.z_index):
-			main_surface.blit(piece.surface, piece.pos)
-
-			if piece.targeting:
-				self.target_piece = piece
-
-
-
-
 
 
