@@ -40,24 +40,15 @@ class Scene:
 
 	def handle_event(self, event):
 		if event.type == pg.MOUSEBUTTONUP:
-			# Soltar pieza
+			# Release piece
 			self.grabbing_piece = None
 			self.grabbing_pos = 0, 0
 			self.grabed_nothing = False
 
+
 	def update(self):
 		for piece in self.pieces:
 			piece.update()
-
-
-
-	def render(self, main_surface):
-		self.target_piece = None
-
-		for piece in sorted(self.pieces, key=lambda p: p.z_index):
-			main_surface.blit(piece.surface, piece.pos)
-			if piece.targeting:
-				self.target_piece = piece
 
 		if self.target_piece is not None and not self.grabed_nothing:
 			self.app.current_cursor = CURSOR_HAND_OPEN
@@ -74,11 +65,22 @@ class Scene:
 			self.grabed_nothing = True
 
 		if self.grabbing_piece is not None:
-			# px, py = self.grabbing_piece.pos
 			dx, dy = self.grabbing_pos
 			mx, my = self.app.mpos
 
 			self.grabbing_piece.pos = mx - dx, my - dy
+
+
+	def render(self, main_surface):
+		self.target_piece = None
+
+		for piece in sorted(self.pieces, key=lambda p: p.z_index):
+			main_surface.blit(piece.surface, piece.pos)
+
+			if piece.targeting:
+				self.target_piece = piece
+
+
 
 
 
