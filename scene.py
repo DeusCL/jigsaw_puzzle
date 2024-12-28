@@ -19,7 +19,9 @@ class Scene:
 		self.grabbing_pos = 0, 0
 
 
-	def load_jigsaw(self, background_img):
+	def load_jigsaw(self, background_img, seed=1):
+		random.seed(seed)
+
 		bg = pg.image.load(background_img)
 
 		cuts = jigsaw.load_cut_images()
