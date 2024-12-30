@@ -3,7 +3,9 @@ from config import *
 
 
 class Piece:
-	def __init__(self, surface, top=None, left=None, bottom=None, right=None):
+	def __init__(self, surface, id, top=None, left=None, bottom=None, right=None):
+		self.id = id
+
 		self.app = None
 
 		self.pos = 0, 0

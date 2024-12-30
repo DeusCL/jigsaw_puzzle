@@ -1,19 +1,20 @@
 from os import getcwd
 from pathlib import Path
 
+
+# ***** SCREEN CONFIGS *****
 TARGET_FPS = 60.0
-
-SCREEN_SIZE = (1366, 768)
-
-PROJECT_FOLDER = Path(getcwd())
-
+SCREEN_SIZE = (1366//2, 768)
 SKY_COLOR = 0x87CEEB
 
-ASSETS_DIR = PROJECT_FOLDER / "src"
 
+# ***** PATH CONFIGS *****
+PROJECT_FOLDER = Path(getcwd())
+ASSETS_DIR = PROJECT_FOLDER / "src"
 CURSORS_DIR = ASSETS_DIR / "cursors"
 
-# cursors
+
+# ***** CURSORS CONFIGS *****
 CURSOR_HAND_OPEN_FILEPATH = CURSORS_DIR / "open_hand.png"
 CURSOR_HAND_CLOSED_FILEPATH = CURSORS_DIR / "closed_hand.png"
 CURSOR_TEXT_MARKER_FILEPATH = CURSORS_DIR / "textmarker.png"
@@ -22,3 +23,13 @@ CURSOR_HAND_FINGER = 1
 CURSOR_HAND_OPEN = 2
 CURSOR_HAND_CLOSED = 3
 CURSOR_TEXT_MARKER = 4
+
+
+# ***** SOCKETS CONFIGS *****
+DATA_CHUNK_SIZE = 1024
+DATA_DELAY = 1/60
+
+
+# ***** GAME CONFIGS *****
+GAME_FONT = 'Consolas'
+GAME_FONT_SIZE = 18

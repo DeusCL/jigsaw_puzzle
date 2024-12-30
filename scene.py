@@ -10,8 +10,6 @@ class Scene:
 
 		self.pieces = list()
 
-		self.load_jigsaw(PROJECT_FOLDER / 'src' / 'images' / 'sample2.png')
-
 		self.max_z_index = 0
 
 		self.target_piece = None
@@ -31,7 +29,7 @@ class Scene:
 
 		# Shuffle
 		for idx, piece in enumerate(self.pieces):
-			piece.pos = random.randint(100, 1300), random.randint(100, 650)
+			piece.pos = random.randint(10, SCREEN_SIZE[0]-100), random.randint(10, SCREEN_SIZE[1]-100)
 			piece.z_index = idx
 
 			piece.app = self.app
@@ -49,6 +47,12 @@ class Scene:
 	def update(self):
 		for piece in self.pieces:
 			piece.update()
+	
+
+	def get_piece(self, id):
+		for piece in self.pieces:
+			if piece.id == id:
+				return piece
 
 
 	def render(self, main_surface):

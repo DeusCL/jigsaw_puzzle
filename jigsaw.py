@@ -69,7 +69,7 @@ def swap_red_green(surface):
 	return surface
 
 
-def apply_cut(piece_surf, cuts, top=None, bottom=None, left=None, right=None):
+def apply_cut(piece_surf, cuts, piece_id, top=None, bottom=None, left=None, right=None):
 	cut_size = cuts[0].get_size()
 
 	piece_surf = piece_surf.copy()
@@ -152,7 +152,7 @@ def apply_cut(piece_surf, cuts, top=None, bottom=None, left=None, right=None):
 				piece_surf.set_at((x, y), (0, 0, 0, 0))
 
 
-	piece = Piece(piece_surf, top=top, left=left, bottom=bottom, right=right)
+	piece = Piece(piece_surf, piece_id, top=top, left=left, bottom=bottom, right=right)
 
 
 	return piece
@@ -224,7 +224,7 @@ def cut_pieces(bg_surface, cuts):
 			piece_canva.fill((0, 255, 0, 0))
 			piece_canva.blit(piece_surf, (clamp_x - x, clamp_y - y))
 
-			piece = apply_cut(piece_canva, cuts, **side_cuts)
+			piece = apply_cut(piece_canva, cuts, f'{i}_{j}', **side_cuts)
 
 			pieces.append(piece)
 
