@@ -5,7 +5,7 @@ import time
 import random
 
 from config import DATA_CHUNK_SIZE, DATA_DELAY
-from utils import send, receive, recursive_update
+from utils import send, receive, full_merge
 
 
 class Server:
@@ -60,7 +60,18 @@ class Server:
             if not "nick" in player_data.keys() and "nick" in incoming_player_data.keys():
                 print(f"{incoming_player_data.get('nick')} joined the game")
 
-            recursive_update(player_data, incoming_player_data)
+            if "piece" in incoming_player_data.keys():
+                piece = incoming_player_data.get("piece")
+
+                piece_id = piece.get("id")
+                piece_pos = piece.get("pos")
+
+                if not (piece_id and piece_pos):
+                    return
+
+                self.update_piece(piece)
+
+            full_merge(player_data, incoming_player_data)
 
 
     def format_address(self, address: tuple[str, int]) -> str:
@@ -115,14 +126,21 @@ class Server:
                 time.sleep(DATA_DELAY)
                 continue
 
-            for player_address, player_data in list(self.players.items()):
+            for player_address, player_data in self.players.items():
                 client_sock = player_data.get("sock")
 
-                other_players = [
-                    {'address': foreign_address, **{key: value for key, value in foreign_data.items() if key != 'sock'}}
-                    for foreign_address, foreign_data in self.players.items()
-                    if foreign_address != player_address
-                ]
+                other_players = []
+
+                for foreign_address, foreign_data in self.players.items():
+                    if foreign_address == player_address:
+                        continue
+
+                    data_to_send = {'address': foreign_address, **{key: value for key, value in foreign_data.items() if key != 'sock'}}
+
+                    if "piece" in foreign_data.keys():
+                        del foreign_data['piece']
+
+                    other_players.append(data_to_send)
 
                 send(client_sock, {'players': other_players})
 

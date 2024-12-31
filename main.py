@@ -101,6 +101,12 @@ class App:
             self.mpos = pg.mouse.get_pos()
             self.client.prepare({"player": {"mpos": self.mpos}})
 
+        if self.scene.grabbing_piece is not None:
+            piece_id = self.scene.grabbing_piece.id
+            piece_pos = self.scene.grabbing_piece.pos
+
+            self.client.prepare({"player": {"piece": {"id":piece_id, "pos": piece_pos}}})
+
         self.scene.update()
 
 
@@ -138,7 +144,7 @@ class App:
 
 def main():
     app = App()
-    app.run()
+    app.run(host='127.0.0.1')
 
 
 

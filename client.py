@@ -5,7 +5,7 @@ import random
 import threading
 
 from config import PROJECT_FOLDER, DATA_DELAY
-from utils import send, receive, recursive_update
+from utils import send, receive, full_merge
 
 
 class Client:
@@ -39,8 +39,18 @@ class Client:
             print(f"Updating {len(pieces_data)} pieces at once...")
             for piece_data in pieces_data:
                 self.update_piece(piece_data)
+        
 
-        elif "players" in message:
+        if "pieces2" in message:
+            pieces_update = message.get("pieces2")
+
+            print(f"Updating pieces: {pieces_update}")
+            
+            for piece_id, piece_pos in pieces_update.items():
+                self.update_piece({'id': piece_id, 'pos': piece_pos})
+
+
+        if "players" in message:
             # Update a player
             incoming_data_player = message.get("players")
 
@@ -50,7 +60,12 @@ class Client:
                 mpos = data_player.get("mpos")
 
                 if not address or not nick or not mpos:
-                    return
+                    continue
+
+                piece = data_player.get("piece")
+
+                if piece:
+                    self.update_piece(piece)
 
                 self.foreign_players[address] = {"nick": nick, "mpos": mpos}
 
@@ -84,7 +99,7 @@ class Client:
     
 
     def prepare(self, data):
-        recursive_update(self.data_to_send, data)
+        full_merge(self.data_to_send, data)
 
 
     def data_sender(self):
