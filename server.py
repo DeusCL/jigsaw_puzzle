@@ -5,7 +5,7 @@ import time
 import random
 
 from config import DATA_CHUNK_SIZE, DATA_DELAY
-from utils import send, receive
+from utils import send, receive, recursive_update
 
 
 class Server:
@@ -55,23 +55,12 @@ class Server:
         if "player" in message:
             # Update a player
             player_data = self.players[str_address]
-
             incoming_player_data = message.get("player")
 
-            mpos = incoming_player_data.get("mpos")
-            nick = incoming_player_data.get("nick")
+            if not "nick" in player_data.keys() and "nick" in incoming_player_data.keys():
+                print(f"{incoming_player_data.get('nick')} joined the game")
 
-            if mpos:
-                player_data["mpos"] = mpos
-            
-            if nick:
-                if not "nick" in player_data.keys():
-                    print(f"{nick} joined the game")
-                else:
-                    print(f"Updating the nick of {str_address} from \"{player_data['nick']}\" to \"{nick}\"")
-
-                player_data["nick"] = nick
-
+            recursive_update(player_data, incoming_player_data)
 
 
     def format_address(self, address: tuple[str, int]) -> str:
@@ -130,7 +119,7 @@ class Server:
                 client_sock = player_data.get("sock")
 
                 other_players = [
-                    {'address':foreign_address, 'nick': foreign_data.get('nick'), 'mpos': foreign_data.get('mpos')}
+                    {'address': foreign_address, **{key: value for key, value in foreign_data.items() if key != 'sock'}}
                     for foreign_address, foreign_data in self.players.items()
                     if foreign_address != player_address
                 ]
