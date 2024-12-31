@@ -65,7 +65,7 @@ class Client:
                 try:
                     self.process_message(data)
                 except Exception as error:
-                    print(f"Error en el procesar mensaje: {error}")
+                    print(f"Error processing message: {error}")
 
             except ConnectionResetError as error:
                 print(f"Connection lost with the server: {error}")
