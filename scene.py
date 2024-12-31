@@ -45,6 +45,9 @@ class Scene:
 
 
 	def update(self):
+		if self.grabbing_piece is not None:
+			self.app.current_cursor = CURSOR_HAND_CLOSED
+
 		for piece in self.pieces:
 			piece.update()
 	

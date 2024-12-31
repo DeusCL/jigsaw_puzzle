@@ -138,7 +138,7 @@ class App:
 
 def main():
     app = App()
-    app.run(host='127.0.0.1')
+    app.run()
 
 
 
