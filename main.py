@@ -93,7 +93,7 @@ class App:
     def update(self):
         self.current_cursor = CURSOR_NORMAL
 
-        self.time = self.clock.tick(TARGET_FPS)*0.001
+        self.time = pg.time.get_ticks()*0.001
 
         mpos = pg.mouse.get_pos()
 
@@ -131,8 +131,8 @@ class App:
             self.update()
             self.render()
 
-            self.dt = self.clock.tick(TARGET_FPS)*0.001
             pg.mouse.set_cursor(self.cursors[self.current_cursor])
+            self.clock.tick(TARGET_FPS)
             pg.display.set_caption(f"{self.clock.get_fps():.2f}")
 
 
