@@ -27,3 +27,20 @@ def receive(sock: socket.socket) -> dict:
     
     return json.loads(data.decode('utf-8'))
 
+
+def recursive_update(dict1, dict2):
+    """
+    Recursively updates dict1 with the contents of dict2.
+    If a key in dict2 corresponds to a dictionary in dict1, the update is recursive.
+    Otherwise, the value from dict2 overwrites the value in dict1.
+    """
+
+    for key, value in dict2.items():
+        if key in dict1 and isinstance(dict1[key], dict) and isinstance(value, dict):
+            # If both values are dictionaries, update recursively
+            recursive_update(dict1[key], value)
+        else:
+            # Otherwise, overwrite or add the value
+            dict1[key] = value
+    return dict1
+

@@ -99,7 +99,7 @@ class App:
 
         if mpos != self.mpos:
             self.mpos = pg.mouse.get_pos()
-            self.client.send({"player": {"mpos": self.mpos}})
+            self.client.prepare({"player": {"mpos": self.mpos}})
 
         self.scene.update()
 

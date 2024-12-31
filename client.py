@@ -4,8 +4,8 @@ import time
 import random
 import threading
 
-from config import DATA_CHUNK_SIZE, PROJECT_FOLDER
-from utils import send, receive
+from config import PROJECT_FOLDER, DATA_DELAY
+from utils import send, receive, recursive_update
 
 
 class Client:
@@ -20,6 +20,8 @@ class Client:
         # where 'mpos' is the mouse position of the foreing player, and 'piece'
         # the piece bein grabbed by the player
         self.foreign_players = {}
+
+        self.data_to_send = {}
 
 
     def update_piece(self, piece_data):
@@ -79,6 +81,23 @@ class Client:
 
         self.connected = False
         self.sock.close()
+    
+
+    def prepare(self, data):
+        recursive_update(self.data_to_send, data)
+
+
+    def data_sender(self):
+        print("Initializing data sender...")
+
+        while True:
+            if len(self.data_to_send) == 0:
+                time.sleep(DATA_DELAY)
+                continue
+
+            self.send(self.data_to_send)
+            self.data_to_send.clear()
+            time.sleep(DATA_DELAY)
 
 
     def connect(self, host='127.0.0.1', port=50000):
@@ -141,6 +160,10 @@ class Client:
         # Now, please listen to the server carefully...
         listener_thread = threading.Thread(target=self.listen_carefully, daemon=True)
         listener_thread.start()
+
+        # And, talk to the server politely
+        sender_thread = threading.Thread(target=self.data_sender, daemon=True)
+        sender_thread.start()
 
         self.connected = True
 
