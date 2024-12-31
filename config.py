@@ -4,7 +4,7 @@ from pathlib import Path
 
 # ***** SCREEN CONFIGS *****
 TARGET_FPS = 60.0
-SCREEN_SIZE = (1366//2, 768)
+SCREEN_SIZE = (1366, 768)
 SKY_COLOR = 0x87CEEB
 
 
