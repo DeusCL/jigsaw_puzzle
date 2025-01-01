@@ -164,6 +164,8 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server(host='127.0.0.1', port=50000)
+    server_ip = input("Enter ip: ")
+    server_port = int(input("Enter port: "))
+    server = Server(host=server_ip, port=server_port)
     server.start()
 
