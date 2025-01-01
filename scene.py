@@ -4,10 +4,13 @@ from config import *
 import jigsaw
 import random
 
+from board import Board
+
 class Scene:
 	def __init__(self, app):
 		self.app = app
 
+		self.board = Board(app)
 		self.pieces = list()
 
 		self.max_z_index = 0
@@ -23,13 +26,17 @@ class Scene:
 
 		bg = pg.image.load(background_img)
 
+		w, h = bg.get_size()
+
+		self.board.size = w, h
+
 		cuts = jigsaw.load_cut_images()
 
 		self.pieces = jigsaw.cut_pieces(bg, cuts)
 
 		# Shuffle
 		for idx, piece in enumerate(self.pieces):
-			piece.pos = random.randint(10, SCREEN_SIZE[0]-100), random.randint(10, SCREEN_SIZE[1]-100)
+			piece.pos = random.randint(50 + w, SCREEN_SIZE[0]-100), random.randint(10, SCREEN_SIZE[1]-100)
 			piece.z_index = idx
 
 			piece.app = self.app
@@ -38,6 +45,7 @@ class Scene:
 
 	def handle_event(self, event):
 		if event.type == pg.MOUSEBUTTONUP:
+			self.board.drop_in(self.grabbing_piece)
 			# Release piece
 			self.grabbing_piece = None
 			self.grabbing_pos = 0, 0
@@ -59,10 +67,12 @@ class Scene:
 
 
 	def render(self, main_surface):
+		self.board.render(main_surface)
+
 		self.target_piece = None
 
 		for piece in sorted(self.pieces, key=lambda p: p.z_index):
-			main_surface.blit(piece.surface, piece.pos)
+			piece.render(main_surface)
 
 			if piece.targeting:
 				self.target_piece = piece

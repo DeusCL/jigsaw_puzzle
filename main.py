@@ -29,6 +29,8 @@ class App:
 
         self.font = pg.font.SysFont(GAME_FONT, GAME_FONT_SIZE)
 
+        self.background = pg.image.load(ASSETS_DIR / 'background.png')
+
         self.load_cursors()
 
 
@@ -52,7 +54,9 @@ class App:
 
 
     def render(self):
-        self.screen.fill(SKY_COLOR)
+        # self.screen.fill(0xFFFFFF)
+        self.screen.blit(self.background, (0, 0))
+
         self.scene.render(self.screen)
 
         for player_address, player_data in self.client.foreign_players.items():

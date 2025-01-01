@@ -86,9 +86,9 @@ def apply_cut(piece_surf, cuts, piece_id, top=None, bottom=None, left=None, righ
 	cut_w = cut_size[0]//2
 
 	piece_mask.fill((0, 255, 0, 255), (0, 0, cut_w, cut_w))
-	piece_mask.fill((0, 255, 0, 255), (piece_size[0] - cut_w, 0, cut_w, cut_w))
-	piece_mask.fill((0, 255, 0, 255), (0, piece_size[1] - cut_w, cut_w, cut_w))
-	piece_mask.fill((0, 255, 0, 255), (piece_size[0] - cut_w, piece_size[1] - cut_w, cut_w, cut_w))
+	piece_mask.fill((0, 255, 0, 255), (piece_size[0] - cut_w - 1, 0, cut_w + 1, cut_w))
+	piece_mask.fill((0, 255, 0, 255), (0, piece_size[1] - cut_w - 1, cut_w, cut_w + 1))
+	piece_mask.fill((0, 255, 0, 255), (piece_size[0] - cut_w - 1, piece_size[1] - cut_w - 1, cut_w + 1, cut_w + 1))
 
 	if top is not None:
 		surf_cut = cuts[top]
@@ -152,7 +152,7 @@ def apply_cut(piece_surf, cuts, piece_id, top=None, bottom=None, left=None, righ
 				piece_surf.set_at((x, y), (0, 0, 0, 0))
 
 
-	piece = Piece(piece_surf, piece_id, top=top, left=left, bottom=bottom, right=right)
+	piece = Piece(piece_surf, piece_id, cut_size, top=top, left=left, bottom=bottom, right=right)
 
 
 	return piece
@@ -166,7 +166,7 @@ def cut_pieces(bg_surface, cuts):
 	bg_size = background.get_size()
 
 	cut_w, cut_h = cuts[0].get_size()
-	piece_size = cut_h + 2*(cut_w//2)
+	piece_size = cut_h + cut_w
 
 	piece_canva = pg.Surface((piece_size, piece_size)).convert_alpha()
 
