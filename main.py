@@ -147,8 +147,18 @@ class App:
 
 
 def main():
+    user_ip = input("Enter IP [None]:").strip()
+
+    if user_ip:
+        user_port = input("Enter port [50000]: ").strip()
+
+        try:
+            user_port = int(user_port) if user_port else 50000
+        except ValueError:
+            user_port = 50000
+
     app = App()
-    app.run(host='127.0.0.1')
+    app.run(host=user_ip, port=user_port)
 
 
 
